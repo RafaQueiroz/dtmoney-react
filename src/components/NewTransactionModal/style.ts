@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { darken } from "polished";
+import { darken, transparentize } from "polished";
 
 export const Container = styled.form`
 
@@ -49,22 +49,6 @@ export const TransactionTypeContainer = styled.div`
     gap: 0.5rem;
     margin: 1rem 0;
 
-    button {
-        background: transparent;
-        height: 4rem;
-        display: flex;
-        align-items: center;
-        border: 1px solid #d7d7d7;
-        border-radius: 0.25rem;
-        justify-content: center;
-
-        transition: 0.2s border-color;
-
-        &:hover {
-            border-color: ${darken(0.1, '#a7a7a7')}
-        }
-    }
-
     img {
         width: 1.5rem;
         margin: 0.5rem;
@@ -74,6 +58,32 @@ export const TransactionTypeContainer = styled.div`
         font-size: 1rem;
         color: var(--text-body);
     }
+`;
 
+interface RadioBoxProps{
+    isActive : boolean;
+    activeColor : 'red' | 'green';
+}
 
+const colors = {
+    'red': '#E52E4D',
+    'green' : '#33cc95'
+};
+
+export const RadioBox = styled.button<RadioBoxProps>`
+    background: ${(props) => 
+        props.isActive ? transparentize('0.9', colors[props.activeColor]) : 'transparent' 
+    };
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    border: 1px solid #d7d7d7;
+    border-radius: 0.25rem;
+    justify-content: center;
+
+    transition: 0.2s border-color;
+
+    &:hover {
+        border-color: ${(props) => darken('0.1', colors[props.activeColor])}
+    }
 `;
