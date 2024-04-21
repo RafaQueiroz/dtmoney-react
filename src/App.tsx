@@ -1,4 +1,4 @@
-import { TransactionContext, TransactionContextProvider } from "./TransactionContext";
+import { TransactionContextProvider } from "./TransactionContext";
 import { Dashboard } from "./components/Dashboard";
 
 import { Header } from "./components/Header";

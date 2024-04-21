@@ -20,13 +20,9 @@ interface TransactionContextProps {
 }
 
 // Define um tipo omitindo algumas propriedades.
-// É Possíveç utilizar tbm o Pick para selecionar quais propriedades são desejadas.
+// É Possível utilizar tbm o Pick para selecionar quais propriedades são desejadas.
 // type TransactionContextData = Pick<Transaction, 'title' | 'amount'>;
 type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>;
-
-function createTransaction(transaction: TransactionInput){
-    api.post('transactions', transaction);
-}
 
 export const TransactionContext = createContext<TransactionContextData>(
     // cast necessario para que o typescript não aponte erro na inicização do contexto vazio.
@@ -36,6 +32,20 @@ export const TransactionContext = createContext<TransactionContextData>(
 export const TransactionContextProvider = function({children}: TransactionContextProps){
 
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+    async function createTransaction(transactionInput: TransactionInput){
+        const response = await api.post('transactions', {
+            ...transactionInput, 
+            createdAt: new Date()
+        });
+        const { transaction: newTransaction } = response.data;
+    
+        // Garantir a imutabilidade.
+        setTransactions([
+            ...transactions, // copia todos os itens existentes no array.
+            newTransaction
+        ])
+    }
 
     useEffect(() => {
         api.get('transactions')
