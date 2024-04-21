@@ -1,16 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Container } from "./style";
-import { api } from "../../services/api";
 import { currencyFormat, dateFormat } from "../../helpers/converter";
-
-interface Transaction {
-    id : number,
-    title: string,
-    amount: number,
-    type: string,
-    category: string,
-    createdAt: string
-}
+import { TransactionContext } from "../../TransactionContext";
 
 function compareDate(first: Date, second: Date){
     if (first > second)
@@ -21,12 +12,7 @@ function compareDate(first: Date, second: Date){
 
 export function TransactionsTable(){
 
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
-
-    useEffect(() => {
-        api.get('transactions')
-            .then(response => setTransactions(response.data.transactions));
-    }, []);
+    const transactions = useContext(TransactionContext);
 
     return (
         <Container>

@@ -1,3 +1,4 @@
+import { TransactionContext, TransactionContextProvider } from "./TransactionContext";
 import { Dashboard } from "./components/Dashboard";
 
 import { Header } from "./components/Header";
@@ -18,7 +19,7 @@ export function App() {
     }
 
   return (
-    <>
+    <TransactionContextProvider>
       <Header onNewTransactionModalOpen={handleNewTransactionOpen}/>
       <Dashboard />
 
@@ -26,6 +27,6 @@ export function App() {
         isOpen={isNewTransactionOpen} 
         onModalClose={handleNewTransactionClose}/>
       <GlobalStyle />
-    </>
+    </TransactionContextProvider>
   );
 }
