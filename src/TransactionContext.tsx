@@ -10,11 +10,28 @@ interface Transaction {
     createdAt: string
 }
 
+interface TransactionContextData {
+    transactions: Transaction[],
+    createTransaction: (transaction: TransactionInput) => void
+}
+
 interface TransactionContextProps {
     children: ReactNode;
 }
 
-export const TransactionContext = createContext<Transaction[]>([]);
+// Define um tipo omitindo algumas propriedades.
+// É Possíveç utilizar tbm o Pick para selecionar quais propriedades são desejadas.
+// type TransactionContextData = Pick<Transaction, 'title' | 'amount'>;
+type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>;
+
+function createTransaction(transaction: TransactionInput){
+    api.post('transactions', transaction);
+}
+
+export const TransactionContext = createContext<TransactionContextData>(
+    // cast necessario para que o typescript não aponte erro na inicização do contexto vazio.
+    {} as TransactionContextData 
+);
 
 export const TransactionContextProvider = function({children}: TransactionContextProps){
 
@@ -26,7 +43,7 @@ export const TransactionContextProvider = function({children}: TransactionContex
     }, []);
 
     return(
-        <TransactionContext.Provider value={transactions}>
+        <TransactionContext.Provider value={{transactions, createTransaction}}>
             {children}
         </TransactionContext.Provider>
     )
